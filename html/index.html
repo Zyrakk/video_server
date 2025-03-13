@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://kit.fontawesome.com/4cfcd8f4d3.js" crossorigin="anonymous"></script>
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA//7+AP///wClQWQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAAAAAAAzMAAAAAAzMzIzMzAAADMzMiMzMwAAMyIiIiIjMAAzIiIiIiIzADMiIjIjEiMAMyIiMiMSIwAzIiIyIxIjADMiIjIjEiMAMyIiIiIiIwAzIiIiIiIjADMiIiIiIiMAMzMzMzMzMwAAAAAAAAAAD//wAA+f8AAPj/AACADwAAgAcAAIADAACAAQAAgAEAAIABAACAAQAAgAEAAIABAACAAQAAgAEAAIABAAD//wAA" rel="icon" type="image/x-icon">
+    <title>Twitch</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #18181b;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+          }
+
+          /* Contenedor que agrupa el icono y el título */
+          header {
+            position: relative;
+            text-align: center;
+            background: linear-gradient(90deg, #6441a5, #2a0845);
+            padding: 20px 0;
+          }
+
+          /* Estilo para el icono: posicionado a la izquierda y centrado verticalmente */
+          header i {
+            position: absolute;
+            left: 10px; /* Ajusta según prefieras */
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+            color: #fff;
+          }
+
+          /* Estilo del título */
+          header h1 {
+            margin: 0;
+            font-size: 2.5em;
+          }
+
+          /* Ejemplo de efecto hover para el video */
+          video {
+            display: block;
+            margin: 30px auto;
+            border: 3px solid #6441a5;
+            border-radius: 4px;
+            max-width: 90%;
+            transition: transform 0.3s ease;
+          }
+
+          video:hover {
+            transform: scale(1.02);
+          }
+    </style>
+</head>
+<body>
+    <header>
+        <i class="fa-brands fa-twitch"></i>
+        <h1>Streaming en Vivo</h1>
+    </header>
+  <video id="video" controls autoplay width="640" height="360"></video>
+  <script>
+    var video = document.getElementById('video');
+    var videoSrc = 'http://127.0.0.1:8080/hls/stream.m3u8';
+
+    if (Hls.isSupported()) {
+      var hls = new Hls({
+          maxBufferLength: 5,
+          liveSyncDuration: 1,
+          maxMaxBufferLength: 10
+      });
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function() {
+        video.play();
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc;
+      video.addEventListener('loadedmetadata', function() {
+        video.play();
+      });
+    }
+  </script>
+</body>
+</html>
